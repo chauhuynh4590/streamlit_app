@@ -26,7 +26,7 @@ st.title("Bin Packing Problem")
 
 # uploaded_file = st.file_uploader("Choose a file")
 # if uploaded_file is not None:
-df = pd.read_csv("../Downloads/test.csv")
+df = pd.read_csv("test.csv")
 st.header("INPUT")
 st.write(df)
 packer = Packer()
