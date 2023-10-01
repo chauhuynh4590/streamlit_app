@@ -65,7 +65,8 @@ for box in packer.bins:
     position = []
     rotation = []
     for item in box.items:
-        name.append(item.partno)            
+        name.append(item.partno)        
+        item.position = [int(i) for i in item.position]
         position.append(str(tuple(item.position)))
         rotation.append(item.rotation_type)
     output_df["name"] = np.array(name)
