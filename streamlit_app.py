@@ -24,66 +24,79 @@ def hex_code_colors(seed):
 
 st.title("Bin Packing Problem")
 
-# uploaded_file = st.file_uploader("Choose a file")
-# if uploaded_file is not None:
-df = pd.read_csv("test.csv")
-st.header("INPUT")
-st.write(df)
-packer = Packer()
-st.header("OUTPUT")
-#  init bin 
-for i in range(7):
-    box = Bin(f'Bin{i}', (5, 5, 5), 100,0,0)
-    packer.addBin(box)
 
-for index, row in df.iterrows():
-    packer.addItem(Item(partno=row["name"], name=f'test{index}', typeof='cube', WHD=(row["w"], row["h"], row["d"]), weight=1, level=1,loadbear=100, updown=True, color=hex_code_colors(index)))
-
-# calculate packing 
-packer.pack(
-    bigger_first=True,
-    distribute_items=True,
-    fix_point=True, # Try switching fix_point=True/False to compare the results
-    check_stable=True,
-    support_surface_ratio=0.75,
-    number_of_decimals=0
-)
-packer.putOrder()
-for box in packer.bins:
-
-    volume = box.width * box.height * box.depth
-    print(":::::::::::", box.string())
-
-    print("FITTED ITEMS:")
-    volume_t = 0
-    volume_f = 0
-    unfitted_name = ''
-
-    # '''
-    output_df = pd.DataFrame()
+items = st.slider('Number of demo items?', 30, 100, 50)
+if st.button('Run demo'):
+    df = pd.DataFrame()
+    w = np.random.randint(low = 1, high = 5, size=items)
+    h = np.random.randint(low = 1, high = 5, size=items)
+    d = np.random.randint(low = 1, high = 5, size=items)
     name = []
-    position = []
-    rotation = []
-    for item in box.items:
-        name.append(item.partno)        
-        item.position = [int(i) for i in item.position]
-        position.append(str(tuple(item.position)))
-        rotation.append(item.rotation_type)
-    output_df["name"] = np.array(name)
-    output_df["position"] = np.array(position)
-    output_df["rotation"] = np.array(rotation)
-
-    painter = Painter(box)
-    fig = painter.plotBoxAndItems(
-        title=box.partno,
-        alpha=0.2,
-        write_num=True,
-        fontsize=10
+    for i in range(items):
+        name.append(f"Box-{i}")
+    name = np.array(name)
+    df["name"] = name
+    df["w"] = w
+    df["h"] = h
+    df["d"] = d
+    
+    st.header("INPUT")
+    st.write(df)
+    packer = Packer()
+    st.header("OUTPUT")
+    #  init bin 
+    for i in range(7):
+        box = Bin(f'Bin{i}', (5, 5, 5), 100,0,0)
+        packer.addBin(box)
+    
+    for index, row in df.iterrows():
+        packer.addItem(Item(partno=row["name"], name=f'test{index}', typeof='cube', WHD=(row["w"], row["h"], row["d"]), weight=1, level=1,loadbear=100, updown=True, color=hex_code_colors(index)))
+    
+    # calculate packing 
+    packer.pack(
+        bigger_first=True,
+        distribute_items=True,
+        fix_point=True, # Try switching fix_point=True/False to compare the results
+        check_stable=True,
+        support_surface_ratio=0.75,
+        number_of_decimals=0
     )
-    col_csv, col_fig = st.columns(spec = [0.6, 0.4], gap="small")
-    with col_csv:
-        st.header("csv")
-        st.write(output_df)
-    with col_fig:
-        st.header("figure")
-        st.pyplot(fig)
+    packer.putOrder()
+    for box in packer.bins:
+    
+        volume = box.width * box.height * box.depth
+        print(":::::::::::", box.string())
+    
+        print("FITTED ITEMS:")
+        volume_t = 0
+        volume_f = 0
+        unfitted_name = ''
+    
+        # '''
+        output_df = pd.DataFrame()
+        name = []
+        position = []
+        rotation = []
+        for item in box.items:
+            name.append(item.partno)        
+            item.position = [int(i) for i in item.position]
+            position.append(str(tuple(item.position)))
+            rotation.append(item.rotation_type)
+        output_df["name"] = np.array(name)
+        output_df["position"] = np.array(position)
+        output_df["rotation"] = np.array(rotation)
+    
+        painter = Painter(box)
+        fig = painter.plotBoxAndItems(
+            title=box.partno,
+            alpha=0.2,
+            write_num=True,
+            fontsize=10
+        )
+        col_csv, col_fig = st.columns(spec = [0.6, 0.4], gap="small")
+        with col_csv:
+            st.header("csv")
+            st.write(output_df)
+        with col_fig:
+            st.header("figure")
+            st.pyplot(fig)
