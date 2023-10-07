@@ -26,6 +26,7 @@ st.title("Bin Packing Problem")
 
 
 items = st.slider('Number of demo items?', 30, 100, 50)
+bins = st.slider('Number of bins?', 30, 100, 50)
 if st.button('Run demo'):
     df = pd.DataFrame()
     w = np.random.randint(low = 1, high = 5, size=items)
@@ -45,7 +46,7 @@ if st.button('Run demo'):
     packer = Packer()
     st.header("OUTPUT")
     #  init bin 
-    for i in range(7):
+    for i in range(bins):
         box = Bin(f'Bin{i}', (5, 5, 5), 100,0,0)
         packer.addBin(box)
     
