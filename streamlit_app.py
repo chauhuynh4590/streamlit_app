@@ -32,6 +32,7 @@ if st.button('Run demo'):
     w = np.random.randint(low = 1, high = 5, size=items)
     h = np.random.randint(low = 1, high = 5, size=items)
     d = np.random.randint(low = 1, high = 5, size=items)
+    weight = np.random.randint(low = 1, high = 10, size=items)
     name = []
     for i in range(items):
         name.append(f"Box-{i}")
@@ -40,6 +41,7 @@ if st.button('Run demo'):
     df["w"] = w
     df["h"] = h
     df["d"] = d
+    df["weight"] = weight
     
     st.header("INPUT")
     st.write(df)
@@ -51,7 +53,7 @@ if st.button('Run demo'):
         packer.addBin(box)
     
     for index, row in df.iterrows():
-        packer.addItem(Item(partno=row["name"], name=f'test{index}', typeof='cube', WHD=(row["w"], row["h"], row["d"]), weight=1, level=1,loadbear=100, updown=True, color=hex_code_colors(index)))
+        packer.addItem(Item(partno=row["name"], name=f'test{index}', typeof='cube', WHD=(row["w"], row["h"], row["d"]), weight=row["weight"], level=1,loadbear=100, updown=True, color=hex_code_colors(index)))
     
     # calculate packing 
     packer.pack(
