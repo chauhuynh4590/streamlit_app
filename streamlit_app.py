@@ -26,7 +26,7 @@ st.title("Bin Packing Problem")
 
 
 items = st.slider('Number of demo items?', 30, 100, 50)
-bins = st.slider('Number of bins?', 30, 100, 50)
+bins = st.slider('Number of bins?', 3, 10, 5)
 if st.button('Run demo'):
     df = pd.DataFrame()
     w = np.random.randint(low = 1, high = 5, size=items)
